@@ -1,0 +1,29 @@
+{
+  "name": "vianett",
+  "version": "1.0.0",
+  "description": "Node.js wrapper for Vianett SOAP api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thorarne/vianett.git"
+  },
+  "author": {
+    "name": "Thor Arne Madland",
+    "email": "<thorarne@4real.no>",
+    "url": "http://github.com/thorarne"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thorarne/vianett/issues"
+  },
+  "homepage": "https://github.com/thorarne/vianett#readme",
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "easysoap": "^1.0.5",
+    "moment": "^2.12.0",
+    "underscore": "^1.8.3"
+  }
+}
