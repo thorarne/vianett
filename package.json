@@ -23,7 +23,6 @@
   "dependencies": {
     "bluebird": "^3.3.4",
     "easysoap": "^1.0.5",
-    "moment": "^2.12.0",
     "underscore": "^1.8.3"
   }
 }

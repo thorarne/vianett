@@ -6,7 +6,6 @@
 
 const easysoap = require('easysoap');
 const _ = require("underscore");
-const moment = require('moment');
 
 const defaultArgs = {
         params: {},
@@ -28,6 +27,7 @@ const VIANETT_OPTS = {
 const soapClient = easysoap.createClient(VIANETT_OPTS);
 
 class Client {
+
     constructor(options) {
         this.options = options;
         if (!this.options.username || !this.options.password) {
@@ -35,6 +35,7 @@ class Client {
         }
         this.soapClient = soapClient;
     }
+
     AddUser(params) {
         var args = _.extend(_.clone(defaultArgs), { params: params || {} });
         args.method = 'SgAddUser';
@@ -56,6 +57,7 @@ class Client {
             }
         });
     }
+
     DeleteUser(params) {
         var args = _.extend(_.clone(defaultArgs), { params: params || {} });
         args.method = 'SgDeleteUser';
@@ -96,6 +98,24 @@ class Client {
         });
     }
 
+    createCampaign(params) {
+        var args = _.extend(_.clone(defaultArgs), { params: params || {} });
+        args.method = 'createCampaign';
+        args.params.UserName = this.options.username;
+        args.params.PassWord = this.options.password;
+        if (!args.params.CampaignName) {
+            throw new Error("You have to provide a valid campaign name (CampaignName)");
+        }
+        return sendRequest(args, function(response) {
+            if (response.data.Fault) {
+                throw new Error(response.data.Fault[0].faultstring);
+            }
+            else {
+                return response.data.createCampaignResponse.createCampaignResult;
+            }
+        });
+    }
+
     CreateMessage(params) {
         var args = _.extend(_.clone(defaultArgs), { params: params || {} });
         args.method = 'SgCreateMessage';
@@ -115,9 +135,6 @@ class Client {
         }
         if (!args.params.pricegroup) {
             args.params.pricegroup = 0;
-        }
-        if (!args.params.sendDate) {
-        //    args.params.sendDate = moment().format('YYYY-MM-DD[T]HH:mm:ss');
         }
         return sendRequest(args, function(response) {
             if (response.data.Fault) {
@@ -287,9 +304,31 @@ class Client {
         });
     }
 
+    bindCampaignToConnection(params) {
+        var args = _.extend(_.clone(defaultArgs), { params: params || {} });
+        args.method = 'bindCampaignToConnection';
+        args.params.UserName = this.options.username;
+        args.params.PassWord = this.options.password;
+        if (!args.params.ConnectionID) {
+            throw new Error("You have to provide a valid connection id (ConnectionID)");
+        }
+        if (!args.params.CampaignID) {
+            throw new Error("You have to provide a valid campaign id (CampaignID)");
+        }
+        return sendRequest(args, function(response) {
+            if (response.data.Fault) {
+                console.log(response.data);
+                throw new Error(response.data.Fault[0].faultstring);
+            }
+            else {
+                return response.data.bindCampaignToConnectionResponse.bindCampaignToConnectionResult;
+            }
+        });
+    }
+
 }
+
 function sendRequest(args, normalize) {
-        console.log(args);
         return soapClient.call(args).then(normalize);
 }
 
