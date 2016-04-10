@@ -48,7 +48,6 @@ class Client {
             throw new Error("You have to provide a valid phone number (tel)");
         }
         return sendRequest(args, function(response) {
-            console.log(response.data);
             if (response.data.Fault) {
                 throw new Error(response.data.Fault[0].faultstring);
             }
@@ -69,8 +68,11 @@ class Client {
         if (!args.params.tel) {
             throw new Error("You have to provide a valid phone number (tel)");
         }
+	if (!args.params.name) {
+	    args.params.name = '';
+	}
+
         return sendRequest(args, function(response) {
-            console.log(response.data);
             if (response.data.Fault) {
                 throw new Error(response.data.Fault[0].faultstring);
             }
@@ -94,6 +96,24 @@ class Client {
             }
             else {
                 return response.data.SgCreateGroupResponse.SgCreateGroupResult;
+            }
+        });
+    }
+
+    DeleteGroup(params) {
+        var args = _.extend(_.clone(defaultArgs), { params: params || {} });
+        args.method = 'SgDeleteGroup';
+        args.params.username = this.options.username;
+        args.params.password = this.options.password;
+        if (!args.params.groupId) {
+            throw new Error("You have to provide a valid groupId (groupId)");
+        }
+        return sendRequest(args, function(response) {
+            if (response.data.Fault) {
+                throw new Error(response.data.Fault[0].faultstring);
+            }
+            else {
+                return response.data.SgDeleteGroupResponse.SgDeleteGroupResult;
             }
         });
     }
@@ -138,7 +158,6 @@ class Client {
         }
         return sendRequest(args, function(response) {
             if (response.data.Fault) {
-                console.log(response.data);
                 throw new Error(response.data.Fault[0].faultstring);
             }
             else {
@@ -279,12 +298,12 @@ class Client {
         if (!args.params.tels) {
             throw new Error("You have to provide a valid recipient (tels)");
         }
-        if (!args.params.Msg) {
+        if (!args.params.msg) {
             throw new Error("You have to provide some message content (msg)");
         }
-        if (!args.params.campaign) {
-            throw new Error("You have to provide a valid campaign ID (campaign)");
-        }
+//        if (!args.params.campaign) {
+//            throw new Error("You have to provide a valid campaign ID (campaign)");
+//        }
         if (!args.params.fromAlpha) {
             args.params.fromAlpha = args.params.fromNr;
         }
@@ -317,7 +336,6 @@ class Client {
         }
         return sendRequest(args, function(response) {
             if (response.data.Fault) {
-                console.log(response.data);
                 throw new Error(response.data.Fault[0].faultstring);
             }
             else {
